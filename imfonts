@@ -1,0 +1,95 @@
+#!/bin/bash
+# -*- awk -*-
+
+# For every font that ImageMagick knows about, create a font sample, like so:
+#
+#     convert  -label AvantGarde-Book -font AvantGarde-Book
+#              -pointsize 72 caption:'ABC abc 123' miff:- \
+#     | montage - AvantGarde-Book.png
+#
+# It's done in two steps since ImageMagick has no easy way to specify
+# a different font for the label and the caption.
+
+# hackerb9 (C) 2019. GPL 3 (or better)
+
+# Disable pathname expansion so  imfonts '.*' works properly.
+set -o noglob
+
+usage() {
+    cat <<EOF
+Usage:
+	imfont [ fontname ]
+
+If fontname is left out, all fonts will be generated and each font
+will be placed in its own image file.
+
+If fontname is specified, a single image is created with all
+matching fonts in it.
+
+Fontname is case insensitive and can be a regular expression.
+For example,  imfont "optima|omega"
+EOF
+}
+
+if [[ $1 == -* ]]; then usage; exit; fi
+
+
+search=${1:-.}			# Search for fonts or show all (.)
+
+IFS=$'\n'
+fonts=$(convert -list font |
+	grep 'Font:' | cut -c9- | grep -v 'Noto' | egrep -i $search) 
+
+if [[ -z "$fonts" ]]; then
+  if [[ "$1" ]]; then
+    echo "No font found matching regular expression: $search" >&2
+  else
+    echo "Strange. No fonts found by 'convert -list font'" >&2
+  fi
+  exit 1
+fi
+
+for command in $(echo "$fonts" |
+		 awk -v search=$search '
+BEGIN {
+    header="convert -pointsize 72 ";
+    if (search != ".") {
+	gsub("/", ":", search);	    # Slash is invalid in filename
+	gsub(/\|/, " or ", search); # Get rid of pipe in filename
+	gsub("\\*", "Star", search); # Likewise, other regex characters
+	gsub("\\.", "Dot", search);
+	gsub("^\\^", "Starts with ", search);
+	gsub("\\$$", " at end", search);
+	gsub("\\&", "Ampersand", search); # Nice filenames do not use &.
+	title=" -title \"" search "\"";
+	tile=" -tile 6x ";
+    } else {
+	title="";
+	tile="";
+    }
+    footer="miff:- | montage " title tile " - \"%s\"\n";
+    if (tile) printf(header);
+}
+{
+    if (!tile) printf(header);
+    gsub("&", "\\\\&")	   	# Escape ampersands in font name for shell.
+    printf(" -font " $0);
+    filename = $0 ".png";
+    gsub("[A-Z][a-z]", "-&");	# SeparateCamelCaseByDashes.
+    gsub(/^-/, "");		# well, not the First Letter.
+    gsub("-+", "\\\\n");	# Dashes become newlines.
+    printf(" -label " $0 );
+    printf(" caption:\"ABC abc 123\" ");
+    if (!tile) printf(footer, filename);
+}
+END {
+    if (tile) printf(footer, search ".png");
+}
+		 ')
+do
+    echo "$command"
+    eval "$command"
+done			 
+
+
+

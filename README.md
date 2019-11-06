@@ -1,4 +1,4 @@
-<img align="right" src="README.md.d/GillSansShadowedMTProLight.png">
+<img align="right" src="README.md.d/GillSansShadowedMTPro-Light.png">
 
 # imfonts
 Create sample images of all fonts accessible to ImageMagick

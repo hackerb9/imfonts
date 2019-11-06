@@ -1,3 +1,5 @@
+<img align="right" src="README.md.d/GillSansShadowedMTProLight.png">
+
 # imfonts
 Create sample images of all fonts accessible to ImageMagick
 
@@ -5,6 +7,8 @@ Create sample images of all fonts accessible to ImageMagick
   imfont [ __fontname__ ]
 
 If fontname is left out, an individual image file for every font on the system will be generated.
+
+<img align="right" src="README.md.d/Wood.png">
 
 If fontname is specified, a single image is created with all matching fonts in it.
 

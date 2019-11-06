@@ -10,10 +10,11 @@ If fontname is left out, an individual image file for every font on the system w
 
 <img align="right" src="README.md.d/Wood.png">
 
-If fontname is specified, a single image is created with all matching fonts in it.
+If fontname is specified, for example `imfont Wood`, a single image is created with all matching fonts in it.
 
 Fontname is case insensitive and can be a regular expression.
 For example,  
 
     imfont "optima|omega"
 
+<img align="right" src="README.md.d/OptimaOmega.png">

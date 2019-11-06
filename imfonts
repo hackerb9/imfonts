@@ -62,7 +62,7 @@ BEGIN {
 	gsub("\\$$", " at end", search);
 	gsub("\\&", "Ampersand", search); # Nice filenames do not use &.
 	title=" -title \"" search "\"";
-	tile=" -tile 6x ";
+	tile=" -tile 4x ";
     } else {
 	title="";
 	tile="";

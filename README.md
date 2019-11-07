@@ -29,7 +29,8 @@ matching fonts in it. For example, this is the result on my machine of
 	
 <img src="README.md.d/Wood.png">
 
-_Fontname_ is case insensitive and can be a regular expression.
+_Fontname_ is case insensitive and can be a 
+[regular expression](https://linuxconfig.org/understanding-regular-expressions).
 For example,
 
     imfont "optima|omega"

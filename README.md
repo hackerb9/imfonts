@@ -1,7 +1,7 @@
 # imfonts
 Create sample images of all fonts accessible to ImageMagick
 
-## Usage:
+## Usage
 
   imfont [ _fontname_ ]
 
